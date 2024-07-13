@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fullscreen Video</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+        .video-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #fff; /* Ensures no white space around video */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Ensures the video covers the entire viewport without distortion */
+        }
+        .form__group {
+            position: relative;
+            padding: 20px 0 0;
+            width: 100%;
+            max-width: 180px;
+            margin-bottom: 20px;
+        }
+        .form__field {
+            font-family: inherit;
+            width: 100%;
+            border: none;
+            border-bottom: 2px solid #1899D6;
+            outline: 0;
+            font-size: 17px;
+            color: #8c8f91;
+            padding: 7px 0;
+            background: transparent;
+            transition: border-color 0.2s;
+        }
+        .form__field::placeholder {
+            color: transparent;
+        }
+        .form__field:placeholder-shown ~ .form__label {
+            font-size: 17px;
+            cursor: text;
+            top: 20px;
+        }
+        .form__label {
+            position: absolute;
+            top: 0;
+            display: block;
+            transition: 0.2s;
+            font-size: 17px;
+            color: #9b9b9b;
+            pointer-events: none;
+        }
+        .form__field:focus {
+            padding-bottom: 6px;
+            font-weight: 700;
+            border-width: 3px;
+            border-image: linear-gradient(to right, #116399, #38caef);
+            border-image-slice: 1;
+        }
+        .form__field:focus ~ .form__label {
+            position: absolute;
+            top: 0;
+            display: block;
+            transition: 0.2s;
+            font-size: 17px;
+            color: #38caef;
+            font-weight: 700;
+        }
+        .form__field:required, .form__field:invalid {
+            box-shadow: none;
+        }
+        button {
+            appearance: button;
+            background-color: #1899D6;
+            border: solid transparent;
+            border-radius: 16px;
+            border-width: 0 0 4px;
+            box-sizing: border-box;
+            color: #FFFFFF;
+            cursor: pointer;
+            display: inline-block;
+            font-size: 15px;
+            font-weight: 700;
+            letter-spacing: .8px;
+            line-height: 20px;
+            margin: 0;
+            outline: none;
+            overflow: visible;
+            padding: 13px 19px;
+            text-align: center;
+            text-transform: uppercase;
+            touch-action: manipulation;
+            transform: translateZ(0);
+            transition: filter .2s;
+            user-select: none;
+            -webkit-user-select: none;
+            vertical-align: middle;
+            white-space: nowrap;
+            position: relative;
+        }
+        button:after {
+            background-clip: padding-box;
+            background-color: #1CB0F6;
+            border: solid transparent;
+            border-radius: 16px;
+            border-width: 0 0 4px;
+            bottom: -4px;
+            content: "";
+            left: 0;
+            position: absolute;
+            right: 0;
+            top: 0;
+            z-index: -1;
+        }
+        button:hover:not(:disabled) {
+            filter: brightness(1.1);
+        }
+        button:disabled {
+            cursor: auto;
+        }
+        button:active:after {
+            border-width: 0 0 0px;
+        }
+        button:active {
+            padding-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <audio id="background-music" loop>
+        <source src="clips/music.mp3" type="audio/mp3">
+        Your browser does not support the audio tag.
+    </audio>
+    <div class="video-container" onclick="function1()">
+        <video class="vdo" autoplay playsinline>
+            <source src="clips/1.mov" type="video/mp4">
+        </video>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const audio = document.getElementById('background-music');
+            audio.play().catch(error => {
+                console.log('Autoplay was prevented:', error);
+                document.addEventListener('click', () => audio.play(), { once: true });
+            });
+        });
+
+        let vdo = 1; // Initialize vdo with the starting video number
+
+        function function1() {
+            const videoContainer = document.querySelector('.video-container');
+            const videoElement = document.querySelector('.vdo');
+
+            if (vdo < 12) { // Check if vdo is less than 12
+                vdo++;
+                if (videoElement) {
+                    // Pause current video
+                    videoElement.pause();
+
+                    // Create and load new video element
+                    const newVideo = document.createElement('video');
+                    newVideo.className = 'vdo';
+                    newVideo.autoplay = true;
+                    newVideo.playsinline = true;
+                    newVideo.innerHTML = `<source src="clips/${vdo}.mov" type="video/mp4">`;
+                    videoContainer.appendChild(newVideo);
+
+                    // Remove previous video element
+                    videoContainer.removeChild(videoElement);
+
+                    console.log(vdo);
+                }
+            }
+        }
+    </script>
+</body>
+</html>
